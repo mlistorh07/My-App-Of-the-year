@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Career Path — South African Learners</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f5f7; color: #1a1a1a; min-height: 100vh; }
+
+    /* ── TOP BAR ── */
+    .topbar { background: #3C3489; padding: 14px 20px; display: flex; align-items: center; gap: 12px; }
+    .topbar h1 { font-size: 20px; font-weight: 600; color: white; }
+    .topbar p { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+    /* ── LAYOUT ── */
+    .container { max-width: 780px; margin: 0 auto; padding: 20px 16px 60px; }
+
+    /* ── GRADE TABS ── */
+    .grade-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .grade-row span { font-size: 13px; color: #666; }
+    .grade-tab { padding: 7px 16px; border-radius: 20px; border: 1px solid #ccc; background: white; color: #555; font-size: 13px; cursor: pointer; transition: all .15s; }
+    .grade-tab.active { background: #3C3489; color: white; border-color: #3C3489; }
+
+    /* ── NAV ── */
+    .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 8px; }
+    .nav-grid2 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 24px; }
+    .nav-btn { padding: 10px 6px; border-radius: 10px; border: 1px solid #ddd; background: white; color: #333; font-size: 12px; cursor: pointer; text-align: center; transition: all .15s; }
+    .nav-btn i { display: block; font-size: 20px; margin-bottom: 4px; }
+    .nav-btn:hover { background: #f0effd; }
+    .nav-btn.active { border: 2px solid #3C3489; background: #EEEDFE; color: #3C3489; font-weight: 600; }
+
+    /* ── SECTIONS ── */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ── CARDS ── */
+    .card { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+    .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .card p { font-size: 14px; color: #555; line-height: 1.6; }
+
+    /* ── QUIZ ── */
+    .progress-bar { height: 6px; background: #e5e5e5; border-radius: 3px; margin-bottom: 20px; }
+    .progress-fill { height: 100%; background: #534AB7; border-radius: 3px; transition: width .3s; }
+    .quiz-option { width: 100%; padding: 12px 16px; margin-bottom: 8px; border-radius: 10px; border: 1px solid #ddd; background: white; color: #333; font-size: 14px; cursor: pointer; text-align: left; transition: all .15s; }
+    .quiz-option:hover { background: #EEEDFE; border-color: #534AB7; color: #3C3489; }
+    .quiz-option.selected { background: #EEEDFE; border-color: #3C3489; color: #3C3489; font-weight: 600; }
+
+    /* ── TAGS ── */
+    .tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; background: #EEEDFE; color: #3C3489; margin: 3px; }
+    .tag-green { background: #E1F5EE; color: #0F6E56; }
+    .tag-amber { background: #FAEEDA; color: #854F0B; }
+    .tag-blue { background: #E6F1FB; color: #185FA5; }
+
+    /* ── PATHWAY GRID ── */
+    .path-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .path-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 14px; cursor: pointer; transition: all .15s; }
+    .path-card:hover { border-color: #534AB7; box-shadow: 0 2px 8px rgba(83,74,183,.15); }
+    .path-card i { font-size: 26px; color: #534AB7; display: block; margin-bottom: 8px; }
+    .path-card h4 { font-size: 14px; font-weight: 600; }
+    .path-card p { font-size: 12px; color: #777; margin-top: 3px; }
+    .detail-panel { display: none; background: #f8f7ff; border: 1px solid #c9c5f5; border-radius: 12px; padding: 16px; margin-top: 8px; }
+    .detail-panel.open { display: block; }
+
+    /* ── STATS ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .stat-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 14px; text-align: center; }
+    .stat-num { font-size: 28px; font-weight: 700; color: #3C3489; }
+    .stat-label { font-size: 12px; color: #666; margin-top: 4px; line-height: 1.5; }
+
+    /* ── SALARY BARS ── */
+    .salary-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .salary-label { font-size: 13px; color: #666; width: 115px; flex-shrink: 0; }
+    .salary-bar-bg { flex: 1; background: #eee; border-radius: 4px; height: 24px; overflow: hidden; }
+    .salary-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 12px; font-weight: 600; color: white; }
+
+    /* ── BENEFIT ROWS ── */
+    .benefit-row { display: flex; gap: 14px; align-items: flex-start; padding: 14px; background: white; border: 1px solid #eee; border-radius: 12px; margin-bottom: 10px; }
+    .benefit-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .benefit-row h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .benefit-row p { font-size: 13px; color: #666; line-height: 1.5; }
+
+    /* ── MYTHS ── */
+    .myth-card { background: white; border: 1px solid #eee; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .myth-label { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; background: #FAECE7; color: #993C1D; margin-bottom: 6px; }
+    .myth-q { font-size: 14px; font-weight: 600; color: #993C1D; margin-bottom: 5px; }
+    .myth-a { font-size: 13px; color: #555; line-height: 1.5; }
+
+    /* ── HERO BANNERS ── */
+    .hero-purple { background: #3C3489; border-radius: 12px; padding: 20px; color: white; margin-bottom: 16px; }
+    .hero-green { background: #0F6E56; border-radius: 12px; padding: 20px; color: white; margin-bottom: 16px; }
+    .hero-dark { background: #26215C; border-radius: 12px; padding: 20px; color: white; margin-bottom: 16px; }
+    .hero-purple h2, .hero-green h2, .hero-dark h2 { font-size: 20px; color: white; margin-bottom: 6px; }
+    .hero-purple p, .hero-green p, .hero-dark p { font-size: 14px; opacity: .85; }
+
+    /* ── SKILLS ── */
+    .skill-cat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .skill-cat { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 14px; cursor: pointer; text-align: center; transition: all .15s; }
+    .skill-cat:hover { border-color: #534AB7; }
+    .skill-cat.active { border: 2px solid #3C3489; background: #EEEDFE; }
+    .skill-cat i { font-size: 26px; display: block; margin-bottom: 6px; }
+    .skill-cat h4 { font-size: 14px; font-weight: 600; }
+    .skill-cat p { font-size: 12px; color: #777; margin-top: 3px; }
+    .skill-item { background: white; border: 1px solid #eee; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .skill-item h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .skill-item p { font-size: 13px; color: #666; line-height: 1.5; margin-bottom: 8px; }
+    .skill-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .free-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #EAF3DE; color: #3B6D11; font-weight: 600; }
+    .paid-badge { font-size: 11px; padding: 3px 8px; border-radius: 10px; background: #FAEEDA; color: #854F0B; font-weight: 600; }
+    .platform-tag { font-size: 12px; padding: 3px 10px; border-radius: 10px; background: #E6F1FB; color: #185FA5; }
+
+    /* ── UNIVERSITIES ── */
+    .uni-card { background: white; border: 1px solid #ddd; border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .uni-card h4 { font-size: 15px; font-weight: 600; }
+    .uni-card p { font-size: 13px; color: #666; margin-top: 4px; }
+
+    /* ── STORIES ── */
+    .story-card { background: white; border: 1px solid #eee; border-radius: 12px; padding: 16px; margin-bottom: 12px; display: flex; gap: 14px; align-items: flex-start; }
+    .avatar { width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; }
+
+    /* ── AI CHAT ── */
+    .chat-box { background: #f8f7ff; border-radius: 12px; padding: 14px; margin-bottom: 14px; max-height: 380px; overflow-y: auto; }
+    .ai-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+    .ai-bubble { background: white; border: 1px solid #eee; border-radius: 10px; padding: 12px; margin-bottom: 10px; font-size: 14px; line-height: 1.6; }
+    .ai-bubble.user { background: #f0effd; border-color: #c9c5f5; }
+    .loading-bubble { font-style: italic; color: #888; font-size: 14px; padding: 10px; }
+    .chat-input-row { display: flex; gap: 8px; }
+    .chat-input-row input { flex: 1; padding: 10px 14px; border-radius: 10px; border: 1px solid #ddd; font-size: 14px; }
+    .quick-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .quick-btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; background: white; font-size: 13px; cursor: pointer; }
+    .quick-btn:hover { background: #EEEDFE; border-color: #534AB7; }
+
+    /* ── PLAN FORM ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-row { margin-bottom: 14px; }
+    .form-row label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; font-weight: 500; }
+    .form-row input, .form-row select, .form-row textarea { width: 100%; padding: 9px 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 14px; font-family: inherit; }
+    .form-row textarea { min-height: 72px; resize: vertical; }
+
+    /* ── PLAN PREVIEW ── */
+    .plan-preview { background: white; border: 1px solid #ccc; border-radius: 12px; padding: 28px; margin-top: 16px; display: none; font-family: Georgia, serif; color: #1a1a1a; }
+    .plan-preview.show { display: block; }
+    .plan-preview h1 { font-size: 22px; color: #3C3489; border-bottom: 2px solid #3C3489; padding-bottom: 8px; margin-bottom: 14px; }
+    .plan-preview h2 { font-size: 14px; color: #26215C; margin: 14px 0 5px; font-family: 'Segoe UI', Arial, sans-serif; }
+    .plan-preview p, .plan-preview li { font-size: 13px; color: #333; line-height: 1.7; }
+    .plan-preview ul { padding-left: 18px; }
+    .plan-preview .block { border-left: 3px solid #534AB7; padding-left: 12px; margin-bottom: 14px; }
+    .plan-preview .block-green { border-left: 3px solid #0F6E56; padding-left: 12px; margin-bottom: 14px; }
+    .plan-preview .plan-footer { margin-top: 18px; padding-top: 10px; border-top: 1px solid #eee; font-size: 11px; color: #aaa; text-align: center; font-family: sans-serif; }
+    .plan-actions { display: none; gap: 12px; flex-wrap: wrap; margin-top: 14px; }
+    .plan-actions.show { display: flex; }
+    .generating { text-align: center; font-size: 14px; color: #888; font-style: italic; padding: 20px 0; display: none; }
+
+    /* ── BUTTONS ── */
+    .btn { padding: 10px 20px; border-radius: 10px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .btn-primary { background: #3C3489; color: white; }
+    .btn-primary:hover { background: #534AB7; }
+    .btn-success { background: #0F6E56; color: white; }
+    .btn-success:hover { background: #1D9E75; }
+    .btn-full { width: 100%; padding: 14px; font-size: 15px; }
+    .nsfas-box { background: #E1F5EE; border: 1px solid #9FE1CB; border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+    .nsfas-box h3 { color: #0F6E56; font-size: 15px; margin-bottom: 4px; }
+    .nsfas-box p { color: #085041; font-size: 13px; line-height: 1.6; }
+
+    @media(max-width: 500px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .nav-grid, .nav-grid2 { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1><i class="ti ti-rocket"></i> My Career Path</h1>
+    <p>Discover your future — built for South African learners in Grade 9 to 12</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- Grade selector -->
+  <div class="grade-row">
+    <span>I am in:</span>
+    <button class="grade-tab active" onclick="setGrade(this,'9')">Grade 9</button>
+    <button class="grade-tab" onclick="setGrade(this,'10')">Grade 10</button>
+    <button class="grade-tab" onclick="setGrade(this,'11')">Grade 11</button>
+    <button class="grade-tab" onclick="setGrade(this,'12')">Grade 12</button>
+  </div>
+
+  <!-- Navigation row 1 -->
+  <div class="nav-grid">
+    <button class="nav-btn active" onclick="show('quiz',this)"><i class="ti ti-bulb"></i>Career quiz</button>
+    <button class="nav-btn" onclick="show('pathways',this)"><i class="ti ti-map"></i>Pathways</button>
+    <button class="nav-btn" onclick="show('college',this)"><i class="ti ti-award"></i>Why college?</button>
+    <button class="nav-btn" onclick="show('skills',this)"><i class="ti ti-tool"></i>Skills</button>
+  </div>
+  <!-- Navigation row 2 -->
+  <div class="nav-grid2">
+    <button class="nav-btn" onclick="show('universities',this)"><i class="ti ti-school"></i>Universities</button>
+    <button class="nav-btn" onclick="show('stories',this)"><i class="ti ti-star"></i>Inspiration</button>
+    <button class="nav-btn" onclick="show('advisor',this)"><i class="ti ti-message-circle"></i>AI advisor</button>
+    <button class="nav-btn" onclick="show('myplan',this)"><i class="ti ti-download"></i>My plan</button>
+  </div>
+
+  <!-- ═══════════ QUIZ ═══════════ -->
+  <div id="quiz" class="section active">
+    <div class="card"><h3>Find your career match</h3><p>Answer 4 quick questions and we'll suggest careers that suit you.</p></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+    <div id="quiz-body"></div>
+  </div>
+
+  <!-- ═══════════ PATHWAYS ═══════════ -->
+  <div id="pathways" class="section">
+    <div class="card"><h3>Subject to career pathways</h3><p>Tap a career field to see what subjects you need and where they lead.</p></div>
+    <div class="path-grid" id="path-grid"></div>
+    <div class="detail-panel" id="path-detail"></div>
+  </div>
+
+  <!-- ═══════════ WHY COLLEGE ═══════════ -->
+  <div id="college" class="section">
+    <div class="hero-purple"><h2>College changes everything</h2><p>Here is what a qualification can do for your life, your family, and your community.</p></div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-num">3×</div><div class="stat-label">More likely to be employed with a degree</div></div>
+      <div class="stat-card"><div class="stat-num">R25k+</div><div class="stat-label">Average graduate salary per month in SA</div></div>
+      <div class="stat-card"><div class="stat-num">68%</div><div class="stat-label">Of top jobs require a tertiary qualification</div></div>
+      <div class="stat-card"><div class="stat-num">1st</div><div class="stat-label">Graduate in your family changes everything</div></div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="margin-bottom:14px;">Monthly salary comparison</h3>
+      <div class="salary-row"><span class="salary-label">No matric</span><div class="salary-bar-bg"><div class="salary-bar-fill" style="width:12%;background:#aaa;">R3 500</div></div></div>
+      <div class="salary-row"><span class="salary-label">Matric only</span><div class="salary-bar-bg"><div class="salary-bar-fill" style="width:22%;background:#888;">R6 500</div></div></div>
+      <div class="salary-row"><span class="salary-label">Diploma (3 yr)</span><div class="salary-bar-bg"><div class="salary-bar-fill" style="width:48%;background:#534AB7;">R14 000</div></div></div>
+      <div class="salary-row"><span class="salary-label">Degree (4 yr)</span><div class="salary-bar-bg"><div class="salary-bar-fill" style="width:72%;background:#3C3489;">R22 000</div></div></div>
+      <div class="salary-row"><span class="salary-label">Postgrad</span><div class="salary-bar-bg"><div class="salary-bar-fill" style="width:100%;background:#26215C;">R35 000+</div></div></div>
+      <p style="font-size:12px;color:#999;margin-top:10px;">Approximate South African averages. Actual salaries vary by field and experience.</p>
+    </div>
+    <div class="card" style="margin-bottom:16px;"><h3 style="margin-bottom:14px;">Benefits beyond money</h3>
+      <div class="benefit-row"><div class="benefit-icon" style="background:#EEEDFE;"><i class="ti ti-users" style="color:#3C3489;"></i></div><div><h4>Break the cycle for your family</h4><p>When you graduate, you lift your whole family. Many graduates become the breadwinner and role model for younger siblings and cousins.</p></div></div>
+      <div class="benefit-row"><div class="benefit-icon" style="background:#E1F5EE;"><i class="ti ti-shield-check" style="color:#0F6E56;"></i></div><div><h4>Job security and stability</h4><p>Qualified professionals are much harder to retrench. Your skills belong to you — no one can take them away.</p></div></div>
+      <div class="benefit-row"><div class="benefit-icon" style="background:#FAEEDA;"><i class="ti ti-world" style="color:#854F0B;"></i></div><div><h4>Work anywhere in the world</h4><p>A South African qualification opens doors across Africa and internationally. You could work in London, Dubai, or Nairobi.</p></div></div>
+      <div class="benefit-row"><div class="benefit-icon" style="background:#EAF3DE;"><i class="ti ti-brain" style="color:#3B6D11;"></i></div><div><h4>Confidence and self-belief</h4><p>College teaches you how to think, solve problems, and speak up. These skills make you powerful in every area of life.</p></div></div>
+      <div class="benefit-row"><div class="benefit-icon" style="background:#E6F1FB;"><i class="ti ti-building-community" style="color:#185FA5;"></i></div><div><h4>Give back to your community</h4><p>South Africa needs qualified black doctors, engineers, teachers, and lawyers in every township and village. You can be that person.</p></div></div>
+    </div>
+    <div class="card"><h3 style="margin-bottom:14px;">Busting the myths</h3>
+      <div class="myth-card"><span class="myth-label">Myth</span><div class="myth-q">"College is only for rich or smart people."</div><div class="myth-a">NSFAS funds students from households earning under R350,000/year. Many first-generation graduates started with average marks. What matters is commitment.</div></div>
+      <div class="myth-card"><span class="myth-label">Myth</span><div class="myth-q">"I can't afford it — my family has no money."</div><div class="myth-a">NSFAS, company bursaries, and university scholarships exist specifically for students like you. Thousands of black South Africans study completely free every year.</div></div>
+      <div class="myth-card"><span class="myth-label">Myth</span><div class="myth-q">"I'll just start working after matric."</div><div class="myth-a">Without a qualification, most jobs pay R4,000–R7,000/month. A 3-year diploma can earn you R14,000/month. A graduate earns far more total income over 5 years.</div></div>
+      <div class="myth-card"><span class="myth-label">Myth</span><div class="myth-q">"Nobody in my family went to college."</div><div class="myth-a">Someone has to be first. That person changes the story for every generation that follows. Being the first graduate is one of the most powerful things you can do.</div></div>
+    </div>
+  </div>
+
+  <!-- ═══════════ SKILLS ═══════════ -->
+  <div id="skills" class="section">
+    <div class="hero-green"><h2><i class="ti ti-tool"></i> Build skills while you study</h2><p>You do not need to wait until college. Start building real skills today — many are free and can be done on your phone.</p></div>
+    <div class="card" style="margin-bottom:16px;"><h3 style="margin-bottom:4px;">Why learn skills now?</h3><p>Learners who build extra skills stand out for bursaries, universities, and jobs. Even 30 minutes a day makes a big difference.</p></div>
+    <div class="skill-cat-grid" id="skill-cat-grid"></div>
+    <div id="skill-list"></div>
+  </div>
+
+  <!-- ═══════════ UNIVERSITIES ═══════════ -->
+  <div id="universities" class="section">
+    <div class="card"><h3>Universities and bursaries in South Africa</h3><p>Key institutions and funding opportunities for black learners.</p></div>
+    <div id="uni-list"></div>
+  </div>
+
+  <!-- ═══════════ STORIES ═══════════ -->
+  <div id="stories" class="section">
+    <div class="card"><h3>You can make it too</h3><p>South Africans who changed their lives through education.</p></div>
+    <div id="stories-list"></div>
+  </div>
+
+  <!-- ═══════════ AI ADVISOR ═══════════ -->
+  <div id="advisor" class="section">
+    <div class="card"><h3>Ask your AI career advisor</h3><p>Get personalised career guidance — subjects, careers, universities, bursaries, or skills.</p></div>
+    <div class="chat-box" id="chat-box"></div>
+    <div class="chat-input-row">
+      <input type="text" id="chat-input" placeholder="E.g. What careers suit someone who loves Maths?" onkeydown="if(event.key==='Enter')sendChat()"/>
+      <button class="btn btn-primary" onclick="sendChat()">Ask <i class="ti ti-arrow-right"></i></button>
+    </div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="quickAsk('What careers can I do with Maths and Physical Science?')">Maths + Science careers</button>
+      <button class="quick-btn" onclick="quickAsk('Which bursaries are available for black students in South Africa?')">Bursaries for me</button>
+      <button class="quick-btn" onclick="quickAsk('What free skills can I learn online as a South African learner?')">Free skills to learn</button>
+      <button class="quick-btn" onclick="quickAsk('Why is going to college better than working after matric?')">Why go to college?</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ MY PLAN ═══════════ -->
+  <div id="myplan" class="section">
+    <div class="hero-dark"><h2><i class="ti ti-download"></i> Download my career plan</h2><p>Fill in your details and we will generate a personalised career plan you can save, print, and share with your family or teacher.</p></div>
+    <div class="card">
+      <h3 style="margin-bottom:16px;">Tell us about yourself</h3>
+      <div class="form-grid">
+        <div class="form-row"><label>Your name</label><input type="text" id="p-name" placeholder="E.g. Thabo Nkosi"/></div>
+        <div class="form-row"><label>Your school</label><input type="text" id="p-school" placeholder="E.g. Durban High School"/></div>
+        <div class="form-row"><label>Current grade</label>
+          <select id="p-grade">
+            <option>Grade 9</option><option>Grade 10</option><option>Grade 11</option><option>Grade 12</option>
+          </select>
+        </div>
+        <div class="form-row"><label>Province</label>
+          <select id="p-province">
+            <option>KwaZulu-Natal</option><option>Gauteng</option><option>Western Cape</option><option>Eastern Cape</option>
+            <option>Limpopo</option><option>Mpumalanga</option><option>North West</option><option>Free State</option><option>Northern Cape</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row"><label>Dream career (one or two)</label><input type="text" id="p-career" placeholder="E.g. Software Developer, Doctor"/></div>
+      <div class="form-row"><label>Your best subjects</label><input type="text" id="p-subjects" placeholder="E.g. Maths, Life Science, English"/></div>
+      <div class="form-row"><label>Skills you want to learn</label><input type="text" id="p-skills" placeholder="E.g. Coding, public speaking, design"/></div>
+      <div class="form-row"><label>Your biggest goal in life</label><textarea id="p-goal" placeholder="E.g. I want to be the first doctor in my family and build a clinic in my community..."></textarea></div>
+      <button class="btn btn-success btn-full" onclick="generatePlan()"><i class="ti ti-sparkles"></i> Generate my career plan</button>
+    </div>
+    <div class="generating" id="generating"><i class="ti ti-loader"></i> Building your personalised career plan...</div>
+    <div class="plan-preview" id="plan-preview"></div>
+    <div class="plan-actions" id="plan-actions">
+      <button class="btn btn-success" onclick="downloadPlan()"><i class="ti ti-download"></i> Download as HTML</button>
+      <button class="btn btn-primary" onclick="window.print()"><i class="ti ti-printer"></i> Print / Save as PDF</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────
+const quizQs = [
+  {q:"What do you enjoy most at school?", opts:["Maths and numbers","Science experiments","Writing and reading","Helping people","Building and making things","Drawing and creating"]},
+  {q:"How do you like to spend your free time?", opts:["Solving puzzles or strategy games","Watching nature or science videos","Reading or writing stories","Volunteering or helping others","Taking apart gadgets or building","Painting, music, or designing"]},
+  {q:"Which environment would you love to work in?", opts:["Office with computers","Hospital or clinic","Outdoors or in the field","School or community","Workshop or factory","Studio or creative space"]},
+  {q:"What is most important to you in a job?", opts:["High salary","Helping others","Being creative","Job security","Working with technology","Making a difference in SA"]}
+];
+const careerMap = {
+  "Maths and numbers":["Actuary","Accountant","Data Scientist","Financial Analyst"],
+  "Science experiments":["Medical Doctor","Chemical Engineer","Pharmacist","Biotechnologist"],
+  "Writing and reading":["Lawyer","Journalist","Teacher","Author"],
+  "Helping people":["Social Worker","Nurse","Psychologist","Community Developer"],
+  "Building and making things":["Civil Engineer","Architect","Electrician","Mechanical Engineer"],
+  "Drawing and creating":["Graphic Designer","Architect","Fashion Designer","Game Developer"]
+};
+const pathways = [
+  {icon:"ti-stethoscope",title:"Health sciences",desc:"Medicine, nursing, pharmacy",subjects:["Maths","Physical Science","Life Science"],careers:["Medical Doctor","Pharmacist","Nurse","Radiographer"],uni:"Wits, UCT, UKZN, UL"},
+  {icon:"ti-building-arch",title:"Engineering",desc:"Civil, mechanical, electrical",subjects:["Maths","Physical Science","Technical Drawing"],careers:["Civil Engineer","Electrical Engineer","Mechanical Engineer"],uni:"Wits, TUT, DUT, UFH"},
+  {icon:"ti-chart-line",title:"Commerce & finance",desc:"Accounting, business, law",subjects:["Maths","Accounting","Business Studies"],careers:["CA(SA)","Financial Analyst","Actuary","Lawyer"],uni:"UNISA, NMU, UCT, UP"},
+  {icon:"ti-device-laptop",title:"Technology & IT",desc:"Software, data, cybersecurity",subjects:["Maths","IT","Physical Science"],careers:["Software Developer","Data Scientist","Cybersecurity Analyst"],uni:"Wits, CPUT, TUT, UNISA"},
+  {icon:"ti-pencil",title:"Teaching",desc:"Shaping the next generation",subjects:["Any 3 NSC subjects","English","Maths Literacy OK"],careers:["Teacher","School Principal","Educational Psychologist"],uni:"UNISA, UJ, NWU, Wits"},
+  {icon:"ti-heartbeat",title:"Social work",desc:"Uplift families and communities",subjects:["Life Orientation","English","History"],careers:["Social Worker","Community Developer","NGO Manager"],uni:"UNISA, UWC, UFH, NMU"},
+  {icon:"ti-palette",title:"Arts & design",desc:"Creative and media careers",subjects:["Visual Arts","Design","English"],careers:["Graphic Designer","Architect","Fashion Designer","Animator"],uni:"CPUT, Wits, UNISA, TUT"},
+  {icon:"ti-leaf",title:"Agriculture",desc:"Feed and protect our land",subjects:["Life Science","Geography","Maths Literacy"],careers:["Agricultural Scientist","Environmental Officer","Game Ranger"],uni:"UFS, UP, Fort Hare, UKZN"},
+];
+const skillCats = [
+  {id:"digital",icon:"ti-device-laptop",title:"Digital & coding",desc:"Tech skills for the future",color:"#3C3489"},
+  {id:"business",icon:"ti-briefcase",title:"Business & money",desc:"Entrepreneurship & finance",color:"#854F0B"},
+  {id:"creative",icon:"ti-palette",title:"Creative & design",desc:"Art, media & content",color:"#993C1D"},
+  {id:"life",icon:"ti-heart",title:"Life skills",desc:"Communication & leadership",color:"#0F6E56"},
+  {id:"science",icon:"ti-flask",title:"Science & maths",desc:"Extra practice & enrichment",color:"#185FA5"},
+  {id:"trades",icon:"ti-tool",title:"Technical trades",desc:"Hands-on practical skills",color:"#3B6D11"},
+];
+const skillData = {
+  digital:[
+    {title:"Coding basics (HTML, Python)",desc:"Learn to code for free. Opens doors in every industry.",platforms:["freeCodeCamp","Khan Academy","Code.org"],free:true},
+    {title:"Microsoft Office & Google Docs",desc:"Essential for any office job.",platforms:["GCFGlobal","Microsoft Learn"],free:true},
+    {title:"Introduction to data and AI",desc:"One of the fastest-growing fields in SA.",platforms:["Google Digital Skills","Coursera"],free:true},
+    {title:"Digital marketing",desc:"Learn how businesses use social media to grow.",platforms:["Meta Blueprint","HubSpot Academy"],free:true},
+  ],
+  business:[
+    {title:"Personal budgeting and saving",desc:"Learn how to manage money and avoid debt.",platforms:["Old Mutual Money School","22seven"],free:true},
+    {title:"Starting a small business",desc:"Turn an idea into a business with SEDA and DTI resources.",platforms:["SEDA Youth","DTI Resources"],free:true},
+    {title:"Basic accounting",desc:"Understand income, expenses, profit and loss.",platforms:["Khan Academy","UNISA open courses"],free:true},
+    {title:"Public speaking",desc:"One of the most valuable career skills in any field.",platforms:["Toastmasters Youth","TED-Ed"],free:true},
+  ],
+  creative:[
+    {title:"Graphic design basics",desc:"Learn Canva and basic design principles.",platforms:["Canva Design School","YouTube"],free:true},
+    {title:"Photography & video editing",desc:"Start with your phone. Great for freelancing.",platforms:["CapCut","YouTube"],free:true},
+    {title:"Creative writing",desc:"Strengthen your English and communicate powerfully.",platforms:["Wattpad","FutureLearn"],free:true},
+    {title:"Music production",desc:"Create beats using free software.",platforms:["GarageBand","LMMS"],free:true},
+  ],
+  life:[
+    {title:"Communication skills",desc:"The most requested skill by SA employers.",platforms:["Coursera","TED Talks"],free:true},
+    {title:"Leadership and teamwork",desc:"Join clubs, community projects, or youth organisations.",platforms:["Scout movement","NYLF SA"],free:true},
+    {title:"Time management",desc:"Study smarter and manage deadlines for college success.",platforms:["YouTube","Studocu SA"],free:true},
+    {title:"Mental health and resilience",desc:"Stay strong through challenges.",platforms:["SADAG","Headspace student"],free:true},
+  ],
+  science:[
+    {title:"Extra maths practice",desc:"Free platforms aligned to the CAPS curriculum.",platforms:["Siyavula","Khan Academy","e-classroom.co.za"],free:true},
+    {title:"Physical science enrichment",desc:"Go deeper than the textbook.",platforms:["Siyavula","CrashCourse Science"],free:true},
+    {title:"Life sciences and health",desc:"Explore biology and the natural world.",platforms:["Khan Academy","Coursera"],free:true},
+    {title:"Engineering thinking",desc:"Problem-solving and design basics before university.",platforms:["Autodesk Tinkercad","MIT OpenCourseWare"],free:true},
+  ],
+  trades:[
+    {title:"Basic electrical skills",desc:"Understand circuits, wiring, and electrical safety.",platforms:["ETDP SETA","YouTube"],free:false},
+    {title:"Plumbing fundamentals",desc:"A qualified plumber earns R20,000+ per month.",platforms:["TVET Colleges","CETA Bursaries"],free:false},
+    {title:"Welding and fabrication",desc:"In high demand across mining and construction.",platforms:["MERSETA Learnerships","TVET Colleges"],free:false},
+    {title:"Motor mechanics",desc:"Always in demand. Start with YouTube, then TVET.",platforms:["TVET Colleges","YouTube"],free:true},
+  ],
+};
+const unis = [
+  {name:"University of KwaZulu-Natal (UKZN)",loc:"Durban / Pietermaritzburg",bursaries:["NSFAS","UKZN Equity Scholarships","Eskom Bursary"],aps:"30–36",cls:"tag-green"},
+  {name:"University of the Witwatersrand",loc:"Johannesburg",bursaries:["NSFAS","Wits Merit Awards","Mining bursaries"],aps:"32–42",cls:"tag-blue"},
+  {name:"University of South Africa (UNISA)",loc:"Distance learning — study from home",bursaries:["NSFAS","UNISA Bursary Fund"],aps:"No APS — matric required",cls:"tag-amber"},
+  {name:"Durban University of Technology (DUT)",loc:"Durban",bursaries:["NSFAS","DUT Bursaries","MERSETA"],aps:"25–30",cls:"tag-green"},
+  {name:"University of Fort Hare",loc:"Alice, Eastern Cape",bursaries:["NSFAS","Presidential Bursary","DAFF Bursary"],aps:"24–30",cls:"tag-green"},
+  {name:"Cape Peninsula University of Technology",loc:"Cape Town",bursaries:["NSFAS","CPUT Merit Bursary","Sector bursaries"],aps:"24–32",cls:"tag-blue"},
+];
+const stories = [
+  {i:"TM",name:"Thabo Molefe",career:"Software Engineer",bg:"background:#EEEDFE;color:#3C3489",story:"Grew up in Soweto, became a software engineer at a Johannesburg tech firm. 'I failed Maths in Grade 10. My teacher believed in me. I repeated and got a bursary to study IT at Wits.'"},
+  {i:"NS",name:"Nomvula Sithole",career:"Medical Doctor",bg:"background:#E1F5EE;color:#0F6E56",story:"From a rural village in Limpopo, now a qualified doctor at UKZN. 'NSFAS paid for everything. My community had no doctor — I became one for them.'"},
+  {i:"ZD",name:"Zanele Dlamini",career:"Graphic Designer",bg:"background:#FAEEDA;color:#854F0B",story:"A Durban girl who loved art and now owns her own studio. 'People said art won't pay. I ignored them. My CPUT portfolio opened every door.'"},
+  {i:"KN",name:"Kagiso Nkosi",career:"Chartered Accountant",bg:"background:#FAECE7;color:#993C1D",story:"Son of a domestic worker, now a CA(SA) with a big four firm. 'Grade 9 I chose Accounting. That one subject choice changed my family's life forever.'"},
+];
+
+// ── STATE ─────────────────────────────────────────────────────────────
+let grade = "9", quizStep = 0, quizAnswers = [], activeSkillCat = null;
+let chatHistory = [], generatedHTML = "";
+
+// ── HELPERS ───────────────────────────────────────────────────────────
+function setGrade(el, g) {
+  document.querySelectorAll('.grade-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active'); grade = g;
+}
+function show(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (id === 'pathways') renderPathways();
+  if (id === 'universities') renderUnis();
+  if (id === 'stories') renderStories();
+  if (id === 'skills') renderSkillCats();
+  if (id === 'quiz' && quizStep === 0) renderQuiz();
+}
+
+// ── QUIZ ─────────────────────────────────────────────────────────────
+function renderQuiz() {
+  document.getElementById('progress').style.width = Math.round((quizStep / quizQs.length) * 100) + '%';
+  const qb = document.getElementById('quiz-body');
+  if (quizStep >= quizQs.length) {
+    const top = Object.entries(quizAnswers.reduce((f,a) => { f[a]=(f[a]||0)+1; return f; }, {})).sort((a,b)=>b[1]-a[1])[0][0];
+    const careers = careerMap[top] || ["Doctor","Engineer","Teacher","Accountant"];
+    qb.innerHTML = `<div class="card"><h3>Your career matches</h3><p style="margin-bottom:12px">Based on your answers, you might enjoy:</p>${careers.map(c=>`<span class="tag" style="font-size:14px;padding:6px 14px;">${c}</span>`).join('')}<p style="margin-top:14px;font-size:13px;color:#666;">Now go to <strong>My plan</strong> to build and download your personalised career plan!</p></div><button class="btn btn-primary" onclick="quizStep=0;quizAnswers=[];renderQuiz()">Retake quiz</button>`;
+    return;
+  }
+  const q = quizQs[quizStep];
+  qb.innerHTML = `<div class="card"><h3 style="margin-bottom:14px;">Q${quizStep+1} of ${quizQs.length}: ${q.q}</h3>${q.opts.map(o=>`<button class="quiz-option" onclick="pickAnswer('${o.replace(/'/g,"\\'")}',this)">${o}</button>`).join('')}</div>`;
+}
+function pickAnswer(ans, el) {
+  document.querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  setTimeout(() => { quizAnswers.push(ans); quizStep++; renderQuiz(); }, 300);
+}
+renderQuiz();
+
+// ── PATHWAYS ──────────────────────────────────────────────────────────
+function renderPathways() {
+  document.getElementById('path-grid').innerHTML = pathways.map((p,i) =>
+    `<div class="path-card" onclick="togglePath(${i})"><i class="ti ${p.icon}"></i><h4>${p.title}</h4><p>${p.desc}</p></div>`
+  ).join('');
+  document.getElementById('path-detail').className = 'detail-panel';
+  document.getElementById('path-detail').innerHTML = '';
+}
+function togglePath(i) {
+  const p = pathways[i], panel = document.getElementById('path-detail');
+  panel.className = 'detail-panel open';
+  panel.innerHTML = `<h3 style="margin-bottom:8px;">${p.title}</h3>
+    <p style="font-size:13px;color:#666;margin-bottom:10px;">Subjects needed:</p>
+    <div style="margin-bottom:12px;">${p.subjects.map(s=>`<span class="tag">${s}</span>`).join('')}</div>
+    <p style="font-size:13px;color:#666;margin-bottom:8px;">Career options:</p>
+    <div style="margin-bottom:12px;">${p.careers.map(c=>`<span class="tag tag-green">${c}</span>`).join('')}</div>
+    <p style="font-size:13px;"><strong>Universities: </strong><span style="color:#666;">${p.uni}</span></p>`;
+}
+
+// ── SKILLS ────────────────────────────────────────────────────────────
+function renderSkillCats() {
+  document.getElementById('skill-cat-grid').innerHTML = skillCats.map(c =>
+    `<div class="skill-cat${activeSkillCat===c.id?' active':''}" onclick="showSkillCat('${c.id}')">
+      <i class="ti ${c.icon}" style="color:${c.color};"></i><h4>${c.title}</h4><p>${c.desc}</p>
+    </div>`
+  ).join('');
+  if (activeSkillCat) renderSkillList(activeSkillCat);
+  else document.getElementById('skill-list').innerHTML = '<p style="font-size:14px;color:#888;padding:8px 0;">Tap a category above to see skills and free learning resources.</p>';
+}
+function showSkillCat(id) {
+  activeSkillCat = id;
+  renderSkillCats();
+}
+function renderSkillList(id) {
+  document.getElementById('skill-list').innerHTML = (skillData[id]||[]).map(s =>
+    `<div class="skill-item"><h4>${s.title}</h4><p>${s.desc}</p>
+      <div class="skill-meta">
+        <span class="${s.free?'free-badge':'paid-badge'}">${s.free?'Free to start':'TVET / paid'}</span>
+        ${s.platforms.map(p=>`<span class="platform-tag">${p}</span>`).join('')}
+      </div>
+    </div>`
+  ).join('');
+}
+
+// ── UNIVERSITIES ──────────────────────────────────────────────────────
+function renderUnis() {
+  document.getElementById('uni-list').innerHTML =
+    `<div class="nsfas-box"><h3>NSFAS — free funding for qualifying students</h3><p>If your household earns under R350,000/year, you may qualify for NSFAS — covering tuition, residence, and living costs. Apply at <strong>nsfas.org.za</strong> in Grade 11 or 12.</p></div>` +
+    unis.map(u =>
+      `<div class="uni-card"><h4>${u.name}</h4>
+        <p><i class="ti ti-map-pin" style="font-size:12px;"></i> ${u.loc}</p>
+        <p style="margin-top:5px;font-size:12px;color:#888;">Min APS: ${u.aps}</p>
+        <div style="margin-top:6px;">${u.bursaries.map(b=>`<span class="tag ${u.cls}" style="font-size:11px;">${b}</span>`).join('')}</div>
+      </div>`
+    ).join('');
+}
+
+// ── STORIES ───────────────────────────────────────────────────────────
+function renderStories() {
+  document.getElementById('stories-list').innerHTML = stories.map(s =>
+    `<div class="story-card">
+      <div class="avatar" style="${s.bg}">${s.i}</div>
+      <div><p style="font-size:14px;font-weight:600;">${s.name} — <span style="font-weight:400;color:#777;">${s.career}</span></p>
+      <p style="font-size:13px;color:#666;margin-top:6px;line-height:1.6;">${s.story}</p></div>
+    </div>`
+  ).join('');
+}
+
+// ── AI CHAT ───────────────────────────────────────────────────────────
+function quickAsk(q) { document.getElementById('chat-input').value = q; sendChat(); }
+async function sendChat() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value.trim(); if (!msg) return;
+  input.value = '';
+  chatHistory.push({ role: 'user', content: msg });
+  renderChat();
+  const box = document.getElementById('chat-box');
+  const loader = document.createElement('div');
+  loader.className = 'loading-bubble'; loader.id = 'loader'; loader.textContent = 'Advisor is thinking...';
+  box.appendChild(loader); box.scrollTop = box.scrollHeight;
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: chatHistory, grade })
+    });
+    const data = await res.json();
+    document.getElementById('loader')?.remove();
+    if (data.reply) {
+      chatHistory.push({ role: 'assistant', content: data.reply });
+      renderChat();
+    }
+  } catch (e) {
+    document.getElementById('loader')?.remove();
+    chatHistory.push({ role: 'assistant', content: 'Sorry, I could not connect right now. Please try again.' });
+    renderChat();
+  }
+}
+function renderChat() {
+  const box = document.getElementById('chat-box');
+  box.innerHTML = chatHistory.map(m =>
+    `<div>
+      <p class="ai-label">${m.role === 'user' ? 'You' : 'Career advisor'}</p>
+      <div class="ai-bubble${m.role==='user'?' user':''}">${m.content}</div>
+    </div>`
+  ).join('');
+  box.scrollTop = box.scrollHeight;
+}
+
+// ── CAREER PLAN ───────────────────────────────────────────────────────
+async function generatePlan() {
+  const name = document.getElementById('p-name').value.trim() || 'Learner';
+  const school = document.getElementById('p-school').value.trim() || 'My School';
+  const g = document.getElementById('p-grade').value;
+  const province = document.getElementById('p-province').value;
+  const career = document.getElementById('p-career').value.trim() || 'To be decided';
+  const subjects = document.getElementById('p-subjects').value.trim() || 'Not specified';
+  const skills = document.getElementById('p-skills').value.trim() || 'Not specified';
+  const goal = document.getElementById('p-goal').value.trim() || 'To succeed and make my family proud';
+
+  document.getElementById('generating').style.display = 'block';
+  document.getElementById('plan-preview').className = 'plan-preview';
+  document.getElementById('plan-actions').className = 'plan-actions';
+
+  try {
+    const res = await fetch('/api/generate-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, school, grade: g, province, career, subjects, skills, goal })
+    });
+    const data = await res.json();
+    document.getElementById('generating').style.display = 'none';
+    if (data.error) { alert(data.error); return; }
+    const plan = data.plan;
+    const today = new Date().toLocaleDateString('en-ZA', { year: 'numeric', month: 'long', day: 'numeric' });
+    generatedHTML = `
+      <h1>My Career Plan</h1>
+      <p style="font-size:13px;color:#555;margin-bottom:4px;font-family:sans-serif;">
+        <strong>Name:</strong> ${name} &nbsp;|&nbsp; <strong>School:</strong> ${school} &nbsp;|&nbsp;
+        <strong>Grade:</strong> ${g} &nbsp;|&nbsp; <strong>Province:</strong> ${province}
+      </p>
+      <p style="font-size:13px;color:#555;margin-bottom:16px;font-family:sans-serif;">
+        <strong>Dream career:</strong> ${career} &nbsp;|&nbsp; <strong>Date:</strong> ${today}
+      </p>
+      <div class="block"><h2>My life goal</h2><p>${goal}</p></div>
+      <div class="block"><h2>Subject advice</h2><p>${plan.subjects_advice}</p></div>
+      <div class="block"><h2>My action plan — step by step</h2>
+        ${plan.steps.map(s => `<h2 style="margin-top:12px;">${s.title}</h2><ul>${s.actions.map(a=>`<li>${a}</li>`).join('')}</ul>`).join('')}
+      </div>
+      <div class="block"><h2>Bursaries and funding to apply for</h2><ul>${plan.bursaries.map(b=>`<li>${b}</li>`).join('')}</ul></div>
+      <div class="block-green"><h2 style="color:#0F6E56;">A message for you</h2><p>${plan.motivation}</p></div>
+      <div class="plan-footer">Generated by My Career Path app &nbsp;|&nbsp; ${today} &nbsp;|&nbsp; Share this with your parents and teacher</div>
+    `;
+    const preview = document.getElementById('plan-preview');
+    preview.innerHTML = generatedHTML;
+    preview.className = 'plan-preview show';
+    document.getElementById('plan-actions').className = 'plan-actions show';
+  } catch (e) {
+    document.getElementById('generating').style.display = 'none';
+    alert('Something went wrong. Please try again.');
+  }
+}
+function downloadPlan() {
+  const name = document.getElementById('p-name').value.trim() || 'career-plan';
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>My Career Plan</title>
+    <style>body{font-family:Georgia,serif;max-width:700px;margin:40px auto;padding:20px;color:#1a1a1a;}
+    h1{font-size:24px;color:#3C3489;border-bottom:2px solid #3C3489;padding-bottom:8px;}
+    h2{font-size:14px;color:#26215C;margin:14px 0 5px;font-family:sans-serif;}
+    p,li{font-size:13px;line-height:1.7;color:#333;}ul{padding-left:18px;}
+    .block{border-left:3px solid #534AB7;padding-left:12px;margin-bottom:14px;}
+    .block-green{border-left:3px solid #0F6E56;padding-left:12px;margin-bottom:14px;}
+    .plan-footer{margin-top:18px;padding-top:10px;border-top:1px solid #eee;font-size:11px;color:#aaa;text-align:center;font-family:sans-serif;}
+    </style></head><body>${generatedHTML}</body></html>`;
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `career-plan-${name.replace(/\s+/g,'-').toLowerCase()}.html`;
+  a.click(); URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
